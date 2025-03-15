@@ -1,12 +1,18 @@
 import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+
+// we'll import the pages here!
+import Home from './pages/Home'
 
 function App() {
 
   return (
-    <>
-      <h1>Visage </h1>
-    
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        
+      </Routes>
+    </Router>
   )
 }
 
