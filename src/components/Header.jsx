@@ -36,8 +36,10 @@ function Header() {
                                         Profile
                                     </DropdownMenuItem>
                                     <DropdownMenuItem as={Link} to="/logout">
-                                        <LogOut className="w-4 h-4 mr-2" />
-                                        Logout
+                                        <Button variant="outline bg-black" onclick={UserProvider.logout}>
+                                            <LogOut className="w-4 h-4 mr-2" />
+                                        </Button>
+                                        {/* Logout */}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
