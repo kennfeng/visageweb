@@ -11,6 +11,33 @@ import {
   Menu,
 } from "lucide-react"
 
+const smoothScroll = (targetId, duration) => {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+  const startPosition = window.scrollY;
+  const distance = targetPosition - startPosition;
+  let startTime = null;
+
+  const easeInOutQuad = (time, start, distance, duration) => {
+    time /= duration / 2;
+    if (time < 1) return (distance / 2) * time * time + start;
+    time--;
+    return (-distance / 2) * (time * (time - 2) - 1) + start;
+  };
+
+  const animation = (currentTime) => {
+    if (startTime === null) startTime = currentTime;
+    const elapsedTime = currentTime - startTime;
+    const run = easeInOutQuad(elapsedTime, startPosition, distance, duration);
+    window.scrollTo(0, run);
+    if (elapsedTime < duration) requestAnimationFrame(animation);
+  };
+
+  requestAnimationFrame(animation);
+};
+
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
@@ -29,11 +56,17 @@ export default function LandingPage() {
                     for your unique skin and features.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex gap-2 min-[400px]:flex-row">
                   <Button size="lg" className="gap-1">
-                    Download Now <ArrowRight className="h-4 w-4" />
+                    <Link to="/register" className="flex items-center gap-2">
+                    Register Now <ArrowRight className="h-4 w-4" />
+                    </Link>
                   </Button>
-                  <Button variant="outline" size="lg">
+                  <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => smoothScroll("features", 1000)}
+                  >
                     Learn More
                   </Button>
                 </div>
@@ -41,7 +74,6 @@ export default function LandingPage() {
               <div className="flex items-center justify-center">
                 <img
                   src="/placeholder.svg?height=550&width=550"
-                  alt="Visage App Demo"
                   width={550}
                   height={550}
                   className="rounded-xl object-cover"
@@ -63,8 +95,8 @@ export default function LandingPage() {
                   Advanced Facial Analysis Technology
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Visage combines cutting-edge AI with dermatological expertise to give you personalized skin and beauty
-                  recommendations.
+                Visage uses advanced technology to provide personalized skin 
+                and beauty recommendations tailored to your unique needs.
                 </p>
               </div>
             </div>
@@ -141,7 +173,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-xl font-bold">Get Analysis</h3>
                 <p className="text-center text-muted-foreground">
-                  Our AI identifies concerns like acne, wrinkles, dark spots, and more.
+                  Our technology identifies concerns like acne, wrinkles, dark spots, and more.
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
