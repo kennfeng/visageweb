@@ -11,7 +11,7 @@ import AnalysisPage from './pages/AnalysisPage'
 function App() {
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-200">
     <Router>
       <Header />
       <Routes>
@@ -22,7 +22,7 @@ function App() {
         
       </Routes>
     </Router>
-    </>
+    </div>
   )
 }
 
