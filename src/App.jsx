@@ -8,8 +8,9 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AnalysisPage from './pages/AnalysisPage'
 import Account from './pages/Account'
-import { UserProvider } from 'contexts/UserContext'
+import { UserProvider } from './contexts/UserContext'
 import PrivateRoute from './components/PrivateRoute'
+// import LandingPage from './pages/LandingPage'
 
 function App() {
 
@@ -19,8 +20,9 @@ function App() {
       <Router>
         <Header />
         <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path='/register' element={<Register />} />
+          {/* <Route path="/" element={<LandingPage />} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path='/register' element={<Register />} />
 
           <Route path="/home" element={
             <PrivateRoute>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUserContext } from 'contexts/UserContext';
+import { useUser } from '@/hooks/useUser';
 
 function PrivateRoute({ children }) {
-  const { user } = useUserContext(); // get the user from the context
+  const { user } = useUser(); // use our custom hook
 
-  // if the user is not authenticated, send them BACK to the login page
+  // if the user is not authenticated, send them back to the login page
   if (!user) {
     return <Navigate to="/login" />;
   }
