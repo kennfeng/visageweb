@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          {/* <Route path="/" element={<LandingPage />} /> */}
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path='/register' element={<Register />} />
 
@@ -36,7 +36,6 @@ function App() {
               <Account />
             </PrivateRoute>
           } />
-        <Route path="/landingpage" element={<LandingPage />} />
           
         </Routes>
       </Router>

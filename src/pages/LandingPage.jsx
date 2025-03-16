@@ -154,7 +154,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features & How It Works Section */}
-        <section id="features" className="w-full bg-muted mb-16 pt-4 rounded-xl">
+        <section id="features" className="w-full bg-muted mb-8 pt-4 rounded-xl">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div
