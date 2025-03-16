@@ -2,8 +2,9 @@ import express from 'express';
 import session from 'express-session';
 import SQLiteStore from 'connect-sqlite3';
 import { initDb } from './database.js';
-import { hashPassword, checkMatch } from './auth/auth.js';
-
+import { hashPassword } from './auth/auth.js';
+import cors from 'cors';
+import bcrypt from 'bcrypt';
 const app = express();
 const SQLiteStoreInstance = SQLiteStore(session);
 
@@ -19,9 +20,19 @@ app.use(
         secret: 'shouldbeinenv',
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: true, maxAge: 7 * 24 * 60 * 60 * 1000 },
+        cookie: { 
+            secure: false, // For development
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            sameSite: 'lax'
+        },
     })
 );
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}))
 
 // we run initDB to create the database and tables
 initDb();
@@ -45,46 +56,127 @@ app.get('/', (req, res) => {
     res.send('Server is ready');
 });
 
-app.post('/login', (req, res) => {
-    if (!req.body.email || !req.body.password) {
-        res.send('Invalid email or password');
+app.post('/login', async (req, res) => {
+    try {
+        if (!req.body.email || !req.body.password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email and password are required'
+            });
+        }
+
+        // Use promise-based query
+        const row = await db.get(
+            'SELECT id, email, firstName, lastName, passwordHash FROM users WHERE email = ?', 
+            [req.body.email]
+        );
+
+        if (!row) {
+            console.log('No user found');
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        const isPasswordValid = await bcrypt.compare(req.body.password, row.passwordHash);
+        if (!isPasswordValid) {
+            console.log('Invalid password');
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        const userData = {
+            id: row.id,
+            email: row.email,
+            firstName: row.firstName,
+            lastName: row.lastName
+        };
+
+        req.session.user = userData;
+        
+        return res.status(200).json({
+            success: true,
+            user: userData
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
     }
-
-    db.get('SELECT * FROM users WHERE email = ?', req.body.email, async (err, user) => {
-        if (err) {
-            res.send('An error occurred');
-        }
-
-        if (!user) {
-            res.send('User not found');
-        }
-
-        if (await checkMatch(req.body.password, user.passwordHash)) {
-            req.session.user = {id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email};
-            res.send('User is logged in');
-        } else {
-            res.send('Invalid email or password');
-        }
-    });
 });
+// app.post('/login', async (req, res) => {
+//     console.log("logging in", req.body);
+//     if (!req.body.email || !req.body.password) {
+//         return res.status(400).send('Invalid email or password');
+//     }
 
-app.post('/register', (req, res) => {
-    // we check to make sure the user details are valid
-    if (!req.body.firstName  || !req.body.lastName || !req.body.email || !req.body.password) {
-        res.send('Missing user details');
-    }
+//     console.log("getting user1");
+//     db.get('SELECT * FROM users WHERE email = ?', [req.body.email], async (err, row) => {
+//         console.log("getting user2");
+//         if (err) {
+//             return res.status(500).send('Database error');
+//         }
 
-    // we hash the password
-    const passwordHash = hashPassword(req.body.password);
+//         console.log("row");
+//         if (!row) {
+//             return res.status(401).send('Invalid credentials');
+//         }
 
-    db.run('INSERT INTO users (firstName, lastName, email, passwordHash) VALUES (?, ?, ?, ?)', [req.body.firstName, req.body.lastName, req.body.email, passwordHash], (err) => {
-        if (err) {
-            res.send('An error occurred');
+//         console.log("row1");
+//         req.session.user = { id: row.id, email: row.email };
+//         return res.send('User logged in');
+//     });
+// });
+
+app.post('/register', async (req, res) => {
+    try {
+        // Check if all required fields are present
+        if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.password) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required'
+            });
         }
 
-        res.send('User registered');
-    });
+        // Check if user already exists
+        const existingUser = await db.get('SELECT email FROM users WHERE email = ?', [req.body.email]);
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: 'Email already registered'
+            });
+        }
 
+        // Hash password
+        const passwordHash = await hashPassword(req.body.password);
+
+        // Insert new user
+        const result = await db.run(
+            'INSERT INTO users (firstName, lastName, email, passwordHash) VALUES (?, ?, ?, ?)',
+            [req.body.firstName, req.body.lastName, req.body.email, passwordHash]
+        );
+
+        // Get the newly created user
+        const newUser = await db.get('SELECT id, email, firstName, lastName FROM users WHERE id = ?', [result.lastID]);
+
+        // Send success response
+        return res.status(201).json({
+            success: true,
+            message: 'User registered successfully',
+            user: newUser
+        });
+    } catch (error) {
+        console.error('Registration error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
 });
 
 app.post('/signout', isAuthenticated, (req, res) => {
@@ -102,166 +194,7 @@ app.get('/user', isAuthenticated, (req, res) => {
     res.send('User details');
 });
 
-app.get('/facialanalysis', (req, res) => {
-    // we use camera info + mediapipe to analyze user's face
 
-    // Demo 2: Continuously grab image from webcam stream and detect it.
-
-    const video = document.getElementById("webcam");
-    const canvasElement = document.getElementById(
-    "output_canvas"
-    );
-
-    const canvasCtx = canvasElement.getContext("2d");
-
-    // Check if webcam access is supported.
-    function hasGetUserMedia() {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-    }
-
-    // If webcam supported, add event listener to button for when user
-    // wants to activate it.
-    if (hasGetUserMedia()) {
-    enableWebcamButton = document.getElementById(
-        "webcamButton"
-    );
-    enableWebcamButton.addEventListener("click", enableCam);
-    } else {
-    console.warn("getUserMedia() is not supported by your browser");
-    }
-
-    // Enable the live webcam view and start detection.
-    function enableCam(event) {
-    if (!faceLandmarker) {
-        console.log("Wait! faceLandmarker not loaded yet.");
-        return;
-    }
-
-    if (webcamRunning === true) {
-        webcamRunning = false;
-        enableWebcamButton.innerText = "ENABLE PREDICTIONS";
-    } else {
-        webcamRunning = true;
-        enableWebcamButton.innerText = "DISABLE PREDICTIONS";
-    }
-
-    // getUsermedia parameters.
-    const constraints = {
-        video: true
-    };
-
-    // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        video.srcObject = stream;
-        video.addEventListener("loadeddata", predictWebcam);
-    });
-    }
-
-    let lastVideoTime = -1;
-    let results = undefined;
-    const drawingUtils = new DrawingUtils(canvasCtx);
-    async function predictWebcam() {
-    const radio = video.videoHeight / video.videoWidth;
-    video.style.width = videoWidth + "px";
-    video.style.height = videoWidth * radio + "px";
-    canvasElement.style.width = videoWidth + "px";
-    canvasElement.style.height = videoWidth * radio + "px";
-    canvasElement.width = video.videoWidth;
-    canvasElement.height = video.videoHeight;
-    // Now let's start detecting the stream.
-    if (runningMode === "IMAGE") {
-        runningMode = "VIDEO";
-        await faceLandmarker.setOptions({ runningMode: runningMode });
-    }
-    let startTimeMs = performance.now();
-    if (lastVideoTime !== video.currentTime) {
-        lastVideoTime = video.currentTime;
-        results = faceLandmarker.detectForVideo(video, startTimeMs);
-    }
-    if (results.faceLandmarks) {
-        for (const landmarks of results.faceLandmarks) {
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_TESSELATION,
-            { color: "#C0C0C070", lineWidth: 1 }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE,
-            { color: "#FF3030" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW,
-            { color: "#FF3030" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_LEFT_EYE,
-            { color: "#30FF30" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW,
-            { color: "#30FF30" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_FACE_OVAL,
-            { color: "#E0E0E0" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_LIPS,
-            { color: "#E0E0E0" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS,
-            { color: "#FF3030" }
-        );
-        drawingUtils.drawConnectors(
-            landmarks,
-            FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS,
-            { color: "#30FF30" }
-        );
-        }
-    }
-    drawBlendShapes(videoBlendShapes, results.faceBlendshapes);
-
-    // Call this function again to keep predicting when the browser is ready.
-    if (webcamRunning === true) {
-        window.requestAnimationFrame(predictWebcam);
-    }
-    }
-
-    function drawBlendShapes(el, blendShapes) {
-    if (!blendShapes.length) {
-        return;
-    }
-
-    console.log(blendShapes[0]);
-    
-    let htmlMaker = "";
-    blendShapes[0].categories.map((shape) => {
-        htmlMaker += `
-        <li class="blend-shapes-item">
-            <span class="blend-shapes-label">${
-            shape.displayName || shape.categoryName
-            }</span>
-            <span class="blend-shapes-value" style="width: calc(${
-            +shape.score * 100
-            }% - 120px)">${(+shape.score).toFixed(4)}</span>
-        </li>
-        `;
-    });
-
-    el.innerHTML = htmlMaker;
-    }
-
-
-    res.send('User details');
-});
 
 app.post('/analysis', isAuthenticated, (req, res) => {
     // this route is a stand-in for the raspberry pi receiving and processing the data
