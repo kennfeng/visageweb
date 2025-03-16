@@ -39,7 +39,7 @@ export function LoginForm({ className, ...props }) {
 
     try {
       // Example API call - replace with your actual API endpoint
-      const response = await fetch('/api/login', {
+      const response = await fetch('/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export function LoginForm({ className, ...props }) {
       }
 
       await login(data);
-      navigate('/'); // Redirect to home page after successful login
+      navigate('/home'); // Redirect to home page after successful login
     } catch (err) {
       setError(err.message);
     } finally {

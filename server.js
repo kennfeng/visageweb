@@ -70,14 +70,14 @@ app.post('/login', (req, res) => {
 
 app.post('/register', (req, res) => {
     // we check to make sure the user details are valid
-    if (!req.body.email || !req.body.password) {
-        res.send('Invalid email or password');
+    if (!req.body.firstName  || !req.body.lastName || !req.body.email || !req.body.password) {
+        res.send('Missing user details');
     }
 
     // we hash the password
     const passwordHash = hashPassword(req.body.password);
 
-    db.run('INSERT INTO users (email, passwordHash) VALUES (?, ?)', req.body.email, passwordHash, (err) => {
+    db.run('INSERT INTO users (firstName, lastName, email, passwordHash) VALUES (?, ?, ?, ?)', [req.body.firstName, req.body.lastName, req.body.email, passwordHash], (err) => {
         if (err) {
             res.send('An error occurred');
         }

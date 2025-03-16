@@ -44,8 +44,25 @@ function Register() {
       return;
     }
 
-    console.log("Registered with data:", formData);
-
+    fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        alert("Registration successful!");
+        navigate("/login");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
     setFormData({
       username: "",
       email: "",
