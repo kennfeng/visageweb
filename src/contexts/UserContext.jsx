@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { redirect } from 'react-router-dom';
 
 export const UserContext = createContext();
 
@@ -9,6 +10,8 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
+    
     // Load saved session on mount
     useEffect(() => {
         try {
@@ -48,6 +51,7 @@ export const UserProvider = ({ children }) => {
             fetch('/logout', { method: 'POST' });
             setUser(null);
             setError(null);
+            redirect('/login');
         } catch (err) {
             console.error('Error during logout:', err);
             setError('Logout failed');

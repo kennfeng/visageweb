@@ -34,6 +34,9 @@ app.use(cors({
     credentials: true,
 }))
 
+// use the public folder to serve static files
+app.use(express.static('public'));
+
 // we run initDB to create the database and tables
 initDb();
 
@@ -52,11 +55,11 @@ function isAuthenticated(req, res, next) {
     }
 }
 
-app.get('/', (req, res) => {
+app.get('/api/test', (req, res) => {
     res.send('Server is ready');
 });
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         if (!req.body.email || !req.body.password) {
             return res.status(400).json({
@@ -133,7 +136,7 @@ app.post('/login', async (req, res) => {
 //     });
 // });
 
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     try {
         // Check if all required fields are present
         if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.password) {
@@ -179,7 +182,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/signout', isAuthenticated, (req, res) => {
+app.post('/api/signout', isAuthenticated, (req, res) => {
     // we sign out the user
     req.session.destroy((err) => {
         if (err) {
@@ -189,22 +192,30 @@ app.post('/signout', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/user', isAuthenticated, (req, res) => {
+app.get('/api/user', isAuthenticated, (req, res) => {
     // we get the user details based on the user requesting it
     res.send('User details');
 });
 
 
 
-app.post('/analysis', isAuthenticated, (req, res) => {
+app.post('/api/analysis', isAuthenticated, (req, res) => {
     // this route is a stand-in for the raspberry pi receiving and processing the data
     res.send('Analysis complete');
 })
 
-app.get('/analysisHistory', isAuthenticated, (req, res) => {
+app.get('/api/analysisHistory', isAuthenticated, (req, res) => {
     // this just returns the user's past analysis results
     res.send('Analysis history');
 });
+
+//anything else returns the built react app
+app.use(express.static('dist'));
+
+app.get('*', (req, res) => {
+    res.sendFile('dist/index.html', { root: '.' });
+});
+
 
 
 app.listen(3000, () => {

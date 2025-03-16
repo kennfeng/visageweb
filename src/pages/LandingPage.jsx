@@ -144,7 +144,7 @@ export default function LandingPage() {
               </div>
               <div className="flex items-center justify-center">
                 <img
-                  src="/public/images/facescan.png"
+                  src="/images/facescan.png"
                   width={550}
                   height={550}
                   className="rounded-xl object-cover"
@@ -215,7 +215,7 @@ export default function LandingPage() {
         <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
           <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
             <img
-              src="/public/logo V.svg"
+              src="/logo V.svg"
               alt="Visage Logo"
               width={18}
               height={18}

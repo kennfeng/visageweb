@@ -18,7 +18,7 @@ function Header() {
     return (
         <header className="flex justify-between items-center p-4 py-2 text-primary-foreground box-border sticky top-0 bg-white z-10">
             {/* <h1 className="text-xl font-semibold text-black">Visage</h1> */}
-            <img src="/logo.svg" alt="Visage" className="h-7 w-auto" />
+            <img src="/logo.svg" alt="Visage" className="h-7 w-auto cursor-pointer" onClick={() => window.location.href = '/home'} />
             <nav className='text-black'>
                 <ul className="flex gap-4 items-center">
                     <li>
@@ -28,7 +28,9 @@ function Header() {
                         {user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <Avatar className="cursor-pointer" src={user.avatar} alt={user.username} />
+                                    <Avatar className="cursor-pointer" src={
+                                        "https://cdn.prod.website-files.com/6467b51d70ea9fec4ce1fd00/6467b51d70ea9fec4ce1fe9f_aiony-haust-3TLl_97HNJo-unsplash.jpg"
+                                        } alt={user.username} />
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem as={Link} to="/profile">

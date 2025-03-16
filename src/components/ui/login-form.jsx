@@ -40,7 +40,7 @@ export function LoginForm({ className, ...props }) {
 
     try {
       // Example API call - replace with your actual API endpoint
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

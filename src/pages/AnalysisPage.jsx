@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 function AnalysisPage() {
     
     function getFacialAnalysis() {
-        fetch('http://localhost:3000/facialanalysis', {
+        fetch('/api/facialanalysis', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
