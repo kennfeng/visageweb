@@ -8,22 +8,36 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AnalysisPage from './pages/AnalysisPage'
 import Account from './pages/Account'
+import { UserProvider } from 'contexts/UserContext'
+import PrivateRoute from './components/PrivateRoute'
 
 function App() {
 
   return (
     <div className="min-h-screen bg-slate-200">
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/home" element={<Home />} />
+    <UserProvider>
+      <Router>
+        <Header />
+        <Routes>
         <Route path="/login" element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route path="/analysis" element={<AnalysisPage />} />
-        <Route path="/account" element={<Account />} /> 
-        
-      </Routes>
-    </Router>
+
+          <Route path="/home" element={
+            <PrivateRoute>
+              <Home/>
+            </PrivateRoute>
+          } />
+          
+          <Route path="/analysis" element={<AnalysisPage />} />
+          <Route path="/account" element={
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          } /> 
+          
+        </Routes>
+      </Router>
+    </UserProvider>
     </div>
   )
 }
