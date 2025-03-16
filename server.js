@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import SQLiteStore from 'connect-sqlite3';
 import { initDb } from './database.js';
-import { hashPassword, checkMatch } from 'auth/auth.js';
+import { hashPassword, checkMatch } from './auth/auth.js';
 
 const app = express();
 const SQLiteStoreInstance = SQLiteStore(session);
