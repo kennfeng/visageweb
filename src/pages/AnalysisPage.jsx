@@ -1,9 +1,14 @@
 import React from "react";
+import Webcam from "react-webcam";
+import { Button } from "@/components/ui/button";
 
 function AnalysisPage() {
     return (
         <div>
-            <h1>AnalysisPage</h1>
+            <Webcam />
+            <Button className="button"> Analyze! </Button>
+            
+
         </div>
     );
 }
