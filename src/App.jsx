@@ -10,7 +10,7 @@ import AnalysisPage from './pages/AnalysisPage'
 import Account from './pages/Account'
 import { UserProvider } from './contexts/UserContext'
 import PrivateRoute from './components/PrivateRoute'
-// import LandingPage from './pages/LandingPage'
+import LandingPage from './pages/LandingPage'
 
 function App() {
 
@@ -35,7 +35,8 @@ function App() {
             <PrivateRoute>
               <Account />
             </PrivateRoute>
-          } /> 
+          } />
+        <Route path="/landingpage" element={<LandingPage />} />
           
         </Routes>
       </Router>
