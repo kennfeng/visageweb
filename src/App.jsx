@@ -11,6 +11,7 @@ import Account from './pages/Account'
 import { UserProvider } from './contexts/UserContext'
 import PrivateRoute from './components/PrivateRoute'
 import LandingPage from './pages/LandingPage'
+import { Toaster } from './components/ui/sonner'
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
           
         </Routes>
       </Router>
+      <Toaster />
     </UserProvider>
     </div>
   )
