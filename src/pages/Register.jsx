@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,8 +10,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "@/context/UserContext";
 
 function Register() {
+
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  if (user) {    
+      navigate("/home");
+  }
+  
   const [formData, setFormData] = useState({
     username: "",
     email: "",
