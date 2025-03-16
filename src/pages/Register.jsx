@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,7 +44,7 @@ function Register() {
   };
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6 md:p-10">
+    <div className="flex h-full w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <Card>
           <CardHeader>
