@@ -92,7 +92,7 @@ export default function LandingPage() {
     setIsTransitioning(true)
     setTimeout(() => {
       setCurrentSection((prev) => (prev + 1) % sections.length)
-    }, 300)
+    }, 450)
   }
 
   const prevSection = () => {
@@ -101,7 +101,7 @@ export default function LandingPage() {
     setIsTransitioning(true)
     setTimeout(() => {
       setCurrentSection((prev) => (prev - 1 + sections.length) % sections.length)
-    }, 300)
+    }, 450)
   }
 
   useEffect(() => {
@@ -115,9 +115,10 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
+      
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 ">
+        <section className="w-full py-12 md:py-26">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
               <div className="flex flex-col justify-center space-y-4">
@@ -125,7 +126,7 @@ export default function LandingPage() {
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                     Your Face, Analyzed. Your Beauty, Optimized.
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  <p className="max-w-[600px] text-gray-800 md:text-xl italic">
                     Visage uses advanced facial recognition to detect visual issues and provide personalized solutions
                     for your unique skin and features.
                   </p>
@@ -143,7 +144,7 @@ export default function LandingPage() {
               </div>
               <div className="flex items-center justify-center">
                 <img
-                  src="/placeholder.svg?height=550&width=550"
+                  src="/public/images/facescan.png"
                   width={550}
                   height={550}
                   className="rounded-xl object-cover"
@@ -154,7 +155,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features & How It Works Section */}
-        <section id="features" className="w-full bg-muted mb-8 pt-4 rounded-xl">
+        <section id="features" className="w-full bg-slate-100 mb-8 pt-4 rounded-xl">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div
