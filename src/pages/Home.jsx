@@ -60,14 +60,14 @@ export default function Home() {
       <header className="flex flex-col items-center mb-8">
         {/* <h1 className="text-3xl font-bold mb-2">Visage</h1> */}
         <img src="/logo V.svg" alt="Visage" className="h-12 w-auto mb-2" />
-        <p className="text-muted-foreground text-center mb-6">AI-powered skin analysis and personalized solutions</p>
+        <p className="text-muted-foreground text-center mb-6">Advanced skin analysis with personalized solutions</p>
         <Button size="lg" onClick={handleTakePhoto} className="gap-2">
           <Camera className="h-5 w-5" /> Scan Now
         </Button>
       </header>
 
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Recent Analyses</h2>
+        <h2 className="text-xl font-semibold underline">Recent Analyses</h2>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={() => setViewMode("grid")} className={cn(viewMode === "grid" && "bg-muted")}>
             <Grid className="h-5 w-5" />
