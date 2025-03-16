@@ -7,6 +7,7 @@ import Header from './components/header'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import AnalysisPage from './pages/AnalysisPage'
+import Account from './pages/Account'
 
 function App() {
 
@@ -15,10 +16,11 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path="/analysis" element={<AnalysisPage />} />
+        <Route path="/account" element={<Account />} /> 
         
       </Routes>
     </Router>
