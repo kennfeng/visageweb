@@ -17,7 +17,8 @@ function Header() {
     
     return (
         <header className="flex justify-between items-center p-4 py-2 text-primary-foreground box-border sticky top-0 bg-white z-10">
-            <h1 className="text-xl font-semibold text-black">Visage</h1>
+            {/* <h1 className="text-xl font-semibold text-black">Visage</h1> */}
+            <img src="/logo.svg" alt="Visage" className="h-7 w-auto" />
             <nav className='text-black'>
                 <ul className="flex gap-4 items-center">
                     <li>

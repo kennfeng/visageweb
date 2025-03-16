@@ -58,7 +58,8 @@ export default function Home() {
   return (
     <div className="container max-w-4xl mx-auto px-4 py-8">
       <header className="flex flex-col items-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Visage</h1>
+        {/* <h1 className="text-3xl font-bold mb-2">Visage</h1> */}
+        <img src="/logo V.svg" alt="Visage" className="h-12 w-auto mb-2" />
         <p className="text-muted-foreground text-center mb-6">AI-powered skin analysis and personalized solutions</p>
         <Button size="lg" onClick={handleTakePhoto} className="gap-2">
           <Camera className="h-5 w-5" /> Scan Now
