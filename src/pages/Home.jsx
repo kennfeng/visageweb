@@ -46,7 +46,14 @@ export default function Home() {
       healthScore: Math.floor(Math.random() * 100),
       issues: ["Analysis pending..."],
     };
-    setImages([newImage, ...images]);
+  
+    setImages((prevImages) => {
+      const updatedImages = [newImage, ...prevImages];
+      if (updatedImages.length > 6) {
+        return updatedImages.slice(0, 6);
+      }
+      return updatedImages;
+    });
   };
 
   const getHealthColor = (score) => {
