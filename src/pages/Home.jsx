@@ -61,7 +61,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold mb-2">Visage</h1>
         <p className="text-muted-foreground text-center mb-6">AI-powered skin analysis and personalized solutions</p>
         <Button size="lg" onClick={handleTakePhoto} className="gap-2">
-          <Camera className="h-5 w-5" /> Take New Photo
+          <Camera className="h-5 w-5" /> Scan Now
         </Button>
       </header>
 
