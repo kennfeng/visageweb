@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 function AnalysisPage() {
     return (
         <div>
-            <Webcam />
+            <Webcam className="m-auto" />
             <Button className="button"> Analyze! </Button>
             
 
