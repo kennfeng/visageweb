@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "@/context/UserContext";
+import { UserContext } from "@/contexts/UserContext";
 
 function Register() {
 
