@@ -215,10 +215,10 @@ export default function LandingPage() {
         <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
           <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
             <img
-              src="/placeholder.svg?height=32&width=32"
+              src="/public/logo V.svg"
               alt="Visage Logo"
-              width={32}
-              height={32}
+              width={18}
+              height={18}
               className="rounded"
             />
             <p className="text-center text-sm leading-loose md:text-left">
