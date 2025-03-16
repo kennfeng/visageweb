@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "@/contexts/UserContext";
+import { toast } from "sonner"
 
 function Register() {
 
@@ -23,7 +24,8 @@ function Register() {
   }
   
   const [formData, setFormData] = useState({
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -39,12 +41,12 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.email || !formData.password) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
       alert("Please fill in every field.");
       return;
     }
 
-    fetch("/register", {
+    fetch("http://localhost:3000/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,9 +56,9 @@ function Register() {
     .then(response => response.json())
     .then(data => {
       if (data.error) {
-        alert(data.error);
+        toast(data.error);
       } else {
-        alert("Registration successful!");
+        toast("Registration successful! You can now login.");
         navigate("/login");
       }
     })
@@ -64,7 +66,8 @@ function Register() {
       console.error("Error:", error);
     });
     setFormData({
-      username: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     });
@@ -84,14 +87,26 @@ function Register() {
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="firstName">First Name</Label>
                   <Input
-                    id="username"
-                    name="username"
+                    id="firstName"
+                    name="firstName"
                     type="text"
-                    value={formData.username}
+                    value={formData.firstName}
                     onChange={handleChange}
-                    placeholder="Enter your username"
+                    placeholder="Enter your first name"
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="Enter your last name"
                     required
                   />
                 </div>
@@ -118,7 +133,7 @@ function Register() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full cursor-pointer">
                   Register
                 </Button>
               </div>

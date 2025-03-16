@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { useUser } from "@/hooks/useUser";
+import { toast } from "sonner";
 
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
@@ -39,11 +40,12 @@ export function LoginForm({ className, ...props }) {
 
     try {
       // Example API call - replace with your actual API endpoint
-      const response = await fetch('/login', {
+      const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies in request
         body: JSON.stringify(formData),
       });
 
@@ -53,9 +55,15 @@ export function LoginForm({ className, ...props }) {
         throw new Error(data.message || 'Login failed');
       }
 
-      await login(data);
+      if (!data.success) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      await login(data.user);
+      toast.success('Successfully logged in!');
       navigate('/home'); // Redirect to home page after successful login
     } catch (err) {
+      toast.error(err.message);
       setError(err.message);
     } finally {
       setIsSubmitting(false);
@@ -119,7 +127,7 @@ export function LoginForm({ className, ...props }) {
               )}
               <Button 
                 type="submit" 
-                className="w-full"
+                className="w-full cursor-pointer"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Logging in..." : "Login"}
@@ -127,7 +135,7 @@ export function LoginForm({ className, ...props }) {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full"
+                className="w-full cursor-pointer"
                 onClick={handleGoogleLogin}
                 disabled={isSubmitting}
               >
