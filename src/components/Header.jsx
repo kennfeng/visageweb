@@ -26,9 +26,9 @@ function Header() {
                     <li>
                         {user ? (
                             <DropdownMenu>
-                                <DropdownTrigger>
+                                <DropdownMenuTrigger>
                                     <Avatar className="cursor-pointer" src={user.avatar} alt={user.username} />
-                                </DropdownTrigger>
+                                </DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem as={Link} to="/profile">
                                         <User className="w-4 h-4 mr-2" />
