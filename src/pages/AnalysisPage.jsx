@@ -5,10 +5,8 @@ import { Button } from "@/components/ui/button";
 function AnalysisPage() {
     return (
         <div>
-            <Webcam className="m-auto" />
+            <Webcam className="m-auto max-w-[90%] h-auto" />
             <Button className="button"> Analyze! </Button>
-            
-
         </div>
     );
 }
