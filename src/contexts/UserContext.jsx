@@ -45,6 +45,7 @@ export const UserProvider = ({ children }) => {
     const logout = () => {
         try {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
+            fetch('/logout', { method: 'POST' });
             setUser(null);
             setError(null);
         } catch (err) {
