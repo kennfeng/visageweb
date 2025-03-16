@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AnalysisPage from './pages/AnalysisPage'
 import Account from './pages/Account'
+import LandingPage from './pages/LandingPage'
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path="/analysis" element={<AnalysisPage />} />
-        <Route path="/account" element={<Account />} /> 
+        <Route path="/account" element={<Account />} />
+        <Route path="/landingpage" element={<LandingPage />} />
         
       </Routes>
     </Router>
