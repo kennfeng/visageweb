@@ -174,7 +174,7 @@ export default function LandingPage() {
             </div>
             <div
               className={`mx-auto grid max-w-5xl gap-4 py-12 transition-all duration-600 ease-in-out
-                ${currentSection === 0 ? "grid-cols-2 md:grid-cols-4" : "grid-cols-1 md:grid-cols-3 place-items-center"}
+                ${currentSection === 0 ? "grid-cols-2 md:grid-cols-4" : "grid-cols-2 md:grid-cols-4"}
                 ${isTransitioning ? (direction === "next" ? "translate-x-[-10px] opacity-0" : "translate-x-[10px] opacity-0") : "translate-x-0 opacity-100"}`}
             >
               {sections[currentSection].features.map((feature, index) => (
