@@ -155,7 +155,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features & How It Works Section */}
-        <section id="features" className="w-full bg-slate-100 mb-8 pt-4 rounded-xl">
+        <section id="features" className="w-full bg-slate-100 mb-8 pt-4 rounded-xl min-h-[500px]">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div
@@ -174,7 +174,7 @@ export default function LandingPage() {
             </div>
             <div
               className={`mx-auto grid max-w-5xl gap-4 py-12 transition-all duration-600 ease-in-out
-                ${currentSection === 0 ? "grid-cols-2 md:grid-cols-4" : "grid-cols-2 md:grid-cols-4"}
+                ${currentSection === 0 ? "grid-cols-2 md:grid-cols-4" : "grid-cols-1 md:grid-cols-3 place-items-center"}
                 ${isTransitioning ? (direction === "next" ? "translate-x-[-10px] opacity-0" : "translate-x-[10px] opacity-0") : "translate-x-0 opacity-100"}`}
             >
               {sections[currentSection].features.map((feature, index) => (
