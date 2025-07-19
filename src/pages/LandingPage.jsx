@@ -118,7 +118,7 @@ export default function LandingPage() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-26">
+        <section className="w-full py-12 md:py-30">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
               <div className="flex flex-col justify-center space-y-4">
@@ -133,9 +133,9 @@ export default function LandingPage() {
                 </div>
                 <div className="flex gap-2 min-[400px]:flex-row">
                   <Button size="lg" className="gap-1">
-                    <Link to="/register" className="flex items-center gap-2">
+                    <a to="/register" className="flex items-center gap-2">
                       Register Now <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    </a>
                   </Button>
                   <Button variant="outline" size="lg" onClick={() => smoothScroll("features", 1000)}>
                     Learn More
